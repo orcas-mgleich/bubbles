@@ -1,2 +1,2 @@
 # bubbles
-BitKoeppe Learnproject Bubbles
+Playing with bubbles - BitKoeppe example project to learn web development
