@@ -11,3 +11,8 @@ Playing with bubbles - BitKoeppe example project to learn web development
 - Bubbles can be shot.
 - Code restructured.
 - All in English.
+
+## Session 3
+- JavaScript and CSS parts separated in own files.
+- Result message on end of game is now styled.
+- Code explained again.

@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+}
+
+#targetLine {
+    background-color: red;
+    height: 2px;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+#legend {
+    border: 1px solid black;
+    height: 40px;
+    left: 10px;
+    position: absolute;
+    top: 10px;
+    width: 70px;
+}
+
+.bubble {
+    background: #ffffffff;
+    border-radius: 100%;
+    left: 50px;
+    position: absolute;
+    top: 50px;
+}
+
+#result {
+    background-color: chocolate;
+    border: 1px solid black;
+    color: white;
+    display: none;
+    font-size: 30px;
+    height: calc(100% - 400px);
+    left: 100px;
+    padding-top: 200px;
+    position: fixed;
+    text-align: center;
+    top: 100px;
+    width: calc(100% - 200px);
+    z-index: 100;
+}
