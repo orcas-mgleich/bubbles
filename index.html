@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Bubbles</title>
+    <style>
+        /*### CSS:*/
+        .bubble {
+            background: #ffffffff;
+            border-radius: 100%;
+
+            position: absolute;
+            top: 50px;
+            left: 50px;
+        }
+    </style>
+    
+    <script type="text/javascript" defer>
+        //### JAVA-SCRIPT:
+        setInterval(function() { spawnBubble() }, 2000);
+        setInterval(function() { moveBubble() }, 20);
+
+        //Methode die alle Seifenblasen bewegt
+        function moveBubble() {
+            // alert("test")   
+            
+            let allBubbles = document.getElementsByClassName("bubble");
+            let zaehlerI =  0;
+            while(zaehlerI < allBubbles.length) {
+                // alert( allBubbles[zaehlerI].id )
+                let topValue =  allBubbles[zaehlerI].style.top;
+                //850px
+                topValue = topValue.substring(0,topValue.length-2);
+                topValue = topValue-0.2;
+                allBubbles[zaehlerI].style.top = topValue + "px";
+                zaehlerI++;
+            }
+        }
+
+        let letzteId = 0;
+        function spawnBubble() {
+            letzteId = letzteId + 1;
+            document.body.innerHTML += `<div id="${letzteId}" class="bubble"></div>`;
+            let bubble = document.getElementById(letzteId);
+            let max = window.innerWidth - 150;
+            let min = 1;
+            
+            bubble.style.left = (Math.random()*(max-min)+min) +"px";
+            bubble.style.top = window.innerHeight - 150 +"px";
+            bubble.style.width = bubble.style.height = (Math.random()*100) +"px";
+            bubble.style.background = randomColor();
+        }
+
+        function randomColor() {
+            let listeAllerZeichen = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+            let color = "#";
+            let zaehlerI = 0
+            while(zaehlerI < 8) {
+                color += listeAllerZeichen[Math.floor(Math.random()*16)]
+                zaehlerI++
+            }
+            // alert (color)
+            return color
+        }
+    </script>
+</head>
+<body> 
+    <div id="1${letzteId++}" class="bubble"></div>
+</body>
+</html>
