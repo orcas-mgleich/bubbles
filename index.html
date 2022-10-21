@@ -4,67 +4,129 @@
     <meta charset="UTF-8"/>
     <title>Bubbles</title>
     <style>
-        /*### CSS:*/
+        body {
+            margin: 0;
+        }
+
+        #targetLine {
+            background-color: red;
+            height: 2px;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+
+        #legend {
+            border: 1px solid black;
+            height: 40px;
+            left: 10px;
+            position: absolute;
+            top: 10px;
+            width: 70px;
+        }
+
         .bubble {
             background: #ffffffff;
             border-radius: 100%;
-
+            left: 50px;
             position: absolute;
             top: 50px;
-            left: 50px;
         }
     </style>
-    
-    <script type="text/javascript" defer>
-        //### JAVA-SCRIPT:
-        setInterval(function() { spawnBubble() }, 2000);
-        setInterval(function() { moveBubble() }, 20);
 
-        //Methode die alle Seifenblasen bewegt
-        function moveBubble() {
-            // alert("test")   
-            
-            let allBubbles = document.getElementsByClassName("bubble");
-            let zaehlerI =  0;
-            while(zaehlerI < allBubbles.length) {
-                // alert( allBubbles[zaehlerI].id )
-                let topValue =  allBubbles[zaehlerI].style.top;
-                //850px
-                topValue = topValue.substring(0,topValue.length-2);
-                topValue = topValue-0.2;
-                allBubbles[zaehlerI].style.top = topValue + "px";
-                zaehlerI++;
-            }
+    <script type="text/javascript">
+        let lastId = 0;
+        let speed = 0.2;
+        let time = 10;
+        let createInterval = null;
+        let moveInterval = null;
+        let speedInterval = null;
+        let legendInterval = null;
+
+        function init() {
+            createInterval = setInterval(function() { createBubble(); }, 2000);
+            moveInterval = setInterval(function() { moveBubble(); }, 20);
+            speedInterval = setInterval(function() { speedUp(); }, 10000);
+            legendInterval = setInterval(function() { legendUpdate(); }, 1000);
         }
 
-        let letzteId = 0;
-        function spawnBubble() {
-            letzteId = letzteId + 1;
-            document.body.innerHTML += `<div id="${letzteId}" class="bubble"></div>`;
-            let bubble = document.getElementById(letzteId);
+        function lost() {
+            clearInterval(createInterval);
+            clearInterval(moveInterval);
+            clearInterval(speedInterval);
+            clearInterval(legendInterval);
+            alert('Du hast verloren!!!');
+        }
+
+        function speedUp() {
+            speed += 0.2;
+            time = 10;
+        }
+
+        function legendUpdate() {
+            time -= 1;
+            let timeElement = document.getElementById('time');
+            timeElement.innerText = parseInt(time) + 's';
+            let speedElement = document.getElementById('speed');
+            speedElement.innerText = parseInt(speed * 5 + "") + "";
+        }
+
+        function createBubble() {
             let max = window.innerWidth - 150;
-            let min = 1;
-            
+            const min = 1;
+            lastId = lastId + 1;
+
+            const bubble = document.createElement('div');
+            bubble.classList.add('bubble');
+            bubble.setAttribute('id', lastId);
             bubble.style.left = (Math.random()*(max-min)+min) +"px";
-            bubble.style.top = window.innerHeight - 150 +"px";
-            bubble.style.width = bubble.style.height = (Math.random()*100) +"px";
+            let size = Math.random()*100;
+            bubble.style.width = bubble.style.height = (size < 10 ? 10 : size) +"px";
+            bubble.style.top = window.innerHeight - parseInt(bubble.style.width) - 3 +"px";
             bubble.style.background = randomColor();
+            bubble.style.cursor = 'pointer';
+            bubble.style.border = '1px solid black';
+            bubble.onclick = removeBubble;
+            document.body.appendChild(bubble);
         }
 
         function randomColor() {
-            let listeAllerZeichen = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
+            let possibleCharacters = [0,1,2,3,4,5,6,7,8,9,'a','b','c','d','e','f'];
             let color = "#";
-            let zaehlerI = 0
-            while(zaehlerI < 8) {
-                color += listeAllerZeichen[Math.floor(Math.random()*16)]
-                zaehlerI++
+            let c = 0;
+            while(c < 8) {
+                color += possibleCharacters[Math.floor(Math.random()*16)];
+                c++;
             }
-            // alert (color)
-            return color
+            return color;
+        }
+
+        function removeBubble() {
+            document.body.removeChild(this);
+        }
+
+        function moveBubble() {
+            let allBubbles = document.getElementsByClassName("bubble");
+            let b =  0;
+            while(b < allBubbles.length) {
+                let topValue =  allBubbles[b].style.top;
+                topValue = parseFloat(topValue);
+                topValue = topValue - speed;
+                if (topValue <= 0) {
+                    lost();
+                }
+                allBubbles[b].style.top = topValue + "px";
+                b++;
+            }
         }
     </script>
 </head>
-<body> 
-    <div id="1${letzteId++}" class="bubble"></div>
+<body onload="init()">
+<div id="targetLine"></div>
+<div id="legend">
+    <b> Time:</b> <label id="time"></label><br/>
+    <b> Speed:</b> <label id="speed"></label>
+</div>
 </body>
 </html>
