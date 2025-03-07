@@ -90,7 +90,18 @@ function lost() {
 
     const xhttp = new XMLHttpRequest();
     xhttp.onload = function() {
-        highscore(this.responseText);
+        try {
+            if (this.responseText.includes("Fatal error")) {
+                throw new Error("Serverfehler");
+            }
+            highscore(this.responseText);
+        } catch (e) {
+            xhttp.onerror(e);
+        }
+    }
+    xhttp.onerror = function() {
+        let endDiv = document.getElementById('result');
+        endDiv.style.display = 'block';
     }
     xhttp.open("GET", "bubble.php?points=" + points, true);
     xhttp.send();
